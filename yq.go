@@ -1,4 +1,4 @@
-package jiq
+package yiq
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func jqrun(query string, json string, opts []string) (res string, err error) {
+func yqrun(query string, json string, opts []string) (res string, err error) {
 	if query == "" {
 		query = "."
 	}
@@ -17,8 +17,10 @@ func jqrun(query string, json string, opts []string) (res string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	var b bytes.Buffer
 
+	opts = append(opts, "eval")
 	opts = append(opts, query)
-	cmd := exec.Command("jq", opts...)
+	opts = append(opts, "-")
+	cmd := exec.Command("yq", opts...)
 	cmd.Stdin = bytes.NewBufferString(json)
 	cmd.Stdout = &b
 	cmd.Stderr = &b
@@ -36,7 +38,7 @@ func jqrun(query string, json string, opts []string) (res string, err error) {
 		cmd.Process.Kill()
 		<-c // Wait for it to return.
 		cancel()
-		err = fmt.Errorf("jq execution timeout")
+		err = fmt.Errorf("yq execution timeout")
 		return
 	}
 

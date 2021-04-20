@@ -1,4 +1,4 @@
-package jiq
+package yiq
 
 import (
 	"strings"

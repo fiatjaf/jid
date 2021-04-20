@@ -1,4 +1,4 @@
-package jiq
+package yiq
 
 import (
 	"io"
@@ -11,7 +11,7 @@ import (
 
 const (
 	DefaultY     int    = 1
-	FilterPrompt string = "[jq]> "
+	FilterPrompt string = "[yq]> "
 )
 
 type Engine struct {
@@ -159,7 +159,7 @@ func (e *Engine) Run() *EngineResult {
 				e.candidatemode = false
 			case termbox.KeyEnter:
 				if !e.candidatemode {
-					cc, err := jqrun(e.query.StringGet(), e.json, e.args)
+					cc, err := yqrun(e.query.StringGet(), e.json, e.args)
 
 					return &EngineResult{
 						Content: cc,
@@ -181,7 +181,7 @@ func (e *Engine) Run() *EngineResult {
 }
 
 func (e *Engine) getContents(prevContents []string) []string {
-	cc, err := jqrun(e.query.StringGet(), e.json, e.args)
+	cc, err := yqrun(e.query.StringGet(), e.json, e.args)
 	if err == nil {
 		return strings.Split("\n"+cc, "\n")
 	} else {
@@ -207,7 +207,7 @@ func (e *Engine) makeCandidates() {
 		if validUntilNow == "" {
 			validUntilNow = "."
 		}
-		keys, err := jqrun(validUntilNow+" | keys", e.json, []string{"-c"})
+		keys, err := yqrun(validUntilNow+" | keys", e.json, []string{"-c"})
 		if err == nil {
 			candidates := strings.Split(keys[1:len(keys)-1], ",")
 			if len(candidates[0]) > 0 && candidates[0][0] == '"' {

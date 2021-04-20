@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/fiatjaf/jiq"
 	"github.com/stretchr/testify/assert"
+	"github.com/zoetrope/yiq"
 )
 
 var called int = 0
@@ -17,10 +17,10 @@ func TestMain(m *testing.M) {
 	defer os.Exit(code)
 }
 
-func TestjiqRun(t *testing.T) {
+func TestyiqRun(t *testing.T) {
 	var assert = assert.New(t)
 
-	e := &jiq.Engine{}
+	e := &yiq.Engine{}
 	result := run(e, false)
 	assert.Zero(result)
 	assert.Equal(2, called)
@@ -32,10 +32,10 @@ func TestjiqRun(t *testing.T) {
 	assert.Zero(result)
 }
 
-func TestjiqRunWithError(t *testing.T) {
+func TestyiqRunWithError(t *testing.T) {
 	called = 0
 	var assert = assert.New(t)
-	e := &jiq.Engine{}
+	e := &yiq.Engine{}
 	result := run(e, false)
 	assert.Equal(2, result)
 	assert.Equal(0, called)
@@ -43,8 +43,8 @@ func TestjiqRunWithError(t *testing.T) {
 
 type EngineMock struct{ err error }
 
-func (e *EngineMock) Run() *jiq.EngineResult {
-	return &jiq.EngineResult{
+func (e *EngineMock) Run() *yiq.EngineResult {
+	return &yiq.EngineResult{
 		Err:     fmt.Errorf(""),
 		Qs:      ".querystring",
 		Content: `{"test": "result"}`,

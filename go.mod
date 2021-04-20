@@ -1,6 +1,6 @@
-module github.com/fiatjaf/jiq
+module github.com/zoetrope/yiq
 
-go 1.14
+go 1.16
 
 require (
 	github.com/mattn/go-runewidth v0.0.9 // indirect

@@ -1,4 +1,4 @@
-package jiq
+package yiq
 
 import (
 	"io/ioutil"
@@ -9,13 +9,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestJqQueries(t *testing.T) {
+func TestYqQueries(t *testing.T) {
 	var assert = assert.New(t)
 
-	res, _ := jqrun(".a", `{"a": 23}`, nil)
+	res, _ := yqrun(".a", `{"a": 23}`, nil)
 	assert.Equal("23", res)
 
-	res, _ = jqrun(`.a | {pli: ., plu: [12, "I have \(.) horses"]}`, `{"a": 23}`, nil)
+	res, _ = yqrun(`.a | {pli: ., plu: [12, "I have \(.) horses"]}`, `{"a": 23}`, nil)
 	assert.Equal(`{
   "pli": 23,
   "plu": [
@@ -24,14 +24,14 @@ func TestJqQueries(t *testing.T) {
   ]
 }`, res)
 
-	res, _ = jqrun(".a[].w", `{"a": [{"w": 18}, {"w": false}]}`, nil)
+	res, _ = yqrun(".a[].w", `{"a": [{"w": 18}, {"w": false}]}`, nil)
 	assert.Equal("18\nfalse", res)
 
-	res, _ = jqrun(".a", `{"a": [{"w": 18}, {"w": false}]}`, []string{"-c"})
+	res, _ = yqrun(".a", `{"a": [{"w": 18}, {"w": false}]}`, []string{"-c"})
 	assert.Equal(`[{"w":18},{"w":false}]`, res)
 }
 
-func TestJqModules(t *testing.T) {
+func TestYqModules(t *testing.T) {
 	var assert = assert.New(t)
 
 	dir, err := ioutil.TempDir("", "")
@@ -43,7 +43,7 @@ func TestJqModules(t *testing.T) {
 
 	content := []byte(`def hello(f): f ;`)
 
-	err = ioutil.WriteFile(filepath.Join(dir, ".jq"), content, 0666)
+	err = ioutil.WriteFile(filepath.Join(dir, ".yq"), content, 0666)
 	if !assert.NoError(err, "error creating tempfile") {
 		return
 	}
@@ -51,6 +51,6 @@ func TestJqModules(t *testing.T) {
 	defer os.Setenv("HOME", os.Getenv("HOME"))
 	os.Setenv("HOME", dir)
 
-	res, _ := jqrun("hello(.hi)", `{"hi": "world"}`, nil)
+	res, _ := yqrun("hello(.hi)", `{"hi": "world"}`, nil)
 	assert.Equal(`"world"`, res)
 }
